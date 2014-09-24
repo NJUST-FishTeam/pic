@@ -41,15 +41,32 @@ func uploadHandle(w http.ResponseWriter, r *http.Request) {
 		}()
 
 		bytes, err := ioutil.ReadAll(file)
-		md5_hash := fmt.Sprintf("%x", md5.Sum(bytes))
-		err = ioutil.WriteFile(path.Join(storePath, md5_hash+".png"), bytes, 0644)
-		if err != nil {
-			log.Fatal("WriteFile: ", err.Error())
+		fileName := saveFile(bytes)
+		if fileName == "" {
+			w.Write([]byte("文件上传失败：不支持的文件类型"))
 			return
 		}
 
-		w.Write([]byte("/static/img/" + md5_hash + ".png"))
+		w.Write([]byte("/static/img/" + fileName))
 	}
+}
+
+func saveFile(pic []byte) string {
+	md5_hash := fmt.Sprintf("%x", md5.Sum(pic))
+	suffix := ""
+	if IsJPEG(pic) {
+		suffix = ".jpg"
+	} else if IsPNG(pic) {
+		suffix = ".png"
+	} else {
+		return ""
+	}
+	err := ioutil.WriteFile(path.Join(storePath, md5_hash+suffix), pic, 0644)
+	if err != nil {
+		log.Fatal("WriteFile: ", err.Error())
+		return ""
+	}
+	return md5_hash + suffix
 }
 
 func main() {
