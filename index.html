@@ -1,13 +1,99 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Golang upload</title>
-    </head>
-    <body>
-        <form id="uploadForm" method="POST" enctype="multipart/form-data" action="/upload/">
-            <p>Golang upload</p>
-            <p>目前只支持jpg和png图片</p>
-            <input type="FILE" id="file" name="file" />
-            <input type="SUBMIT" value="upload">
-        </form>
-    </body>
+
+<head>
+    <title>Golang upload</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <style type="text/css">
+    .blog-title {
+        border: 1px solid #fff;
+        border-left: 0;
+        border-right: 0;
+        display: inline-block;
+        font-size: 60px;
+        font-weight: 700;
+        line-height: 108px;
+        letter-spacing: 2px;
+        margin: 0 auto;
+        padding: 0 58px;
+        position: relative;
+        width: auto;
+    }
+    #logo {
+        padding: 88px;
+        position: relative;
+        text-align: center;
+        padding-bottom: 20px;
+        height: 57%;
+    }
+    html,body,#wrap{
+        background-color: #6e4c96;
+        height:100%;
+        padding: 0;
+        margin: 0;
+    }
+    .upmodel{
+        background-color: #eaeaea;
+        height: 43%;
+    }
+    h1,h3{
+        color: #ffffff;
+    }
+    #uploadForm{
+        margin-left: 40%;
+        
+    }
+    #btn-sub{
+        width: 261px;
+        height: 63px;
+        background-color: #6e4c96;
+    }
+    #Subs{
+        color: #ffffff;
+        font-size: 28px;
+    }
+    #InputFile{
+        width: 87%;
+    }
+    #InputFilelab{
+        width: 12%;
+    }
+    .form-group{
+        padding-top: 10px;
+        padding-left: 15px;
+    }
+    </style>
+</head>
+
+<body>
+<div id="wrap">
+<header id="logo" class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-push-2">
+            <h1 class="blog-title">
+                Push your Pics
+            </h1>
+            <h3 class="blog-desc">
+                This is a simple,but powerful Picture Hosted platform that allows you to share your pictures with the world.
+            </h3>
+        </div>
+    </div>
+</header>
+<div class="upmodel">
+    <form id="uploadForm" method="POST" enctype="multipart/form-data" action="/upload/" role="form">
+        <div class="form-group ">
+            <label  for="InputFile" id="InputFilelab">文件输入</label>
+            <input type="file" id="InputFile">
+            <p class="help-block">目前只支持jpg和png图片.</p>
+        </div>
+        <button type="submit" class="btn" id="btn-sub"><span id="Subs">上传图片</span></button>
+    </form>
+</div>
+</div>
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</body>
+
 </html>
