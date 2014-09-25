@@ -1,4 +1,4 @@
-package main
+package picfs
 
 func IsJPEG(pic []byte) bool {
 	// Magic Number
