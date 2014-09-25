@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"html/template"
 	"os"
 
@@ -41,8 +42,8 @@ func uploadHandle(w http.ResponseWriter, r *http.Request) {
 		}()
 
 		bytes, err := ioutil.ReadAll(file)
-		fileName := saveFile(bytes)
-		if fileName == "" {
+		fileName, err := saveFile(bytes)
+		if err != nil {
 			w.Write([]byte("文件上传失败：不支持的文件类型"))
 			return
 		}
@@ -51,7 +52,7 @@ func uploadHandle(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func saveFile(pic []byte) string {
+func saveFile(pic []byte) (string, error) {
 	md5_hash := fmt.Sprintf("%x", md5.Sum(pic))
 	suffix := ""
 	if IsJPEG(pic) {
@@ -59,14 +60,14 @@ func saveFile(pic []byte) string {
 	} else if IsPNG(pic) {
 		suffix = ".png"
 	} else {
-		return ""
+		return "", errors.New("The file is not a picture")
 	}
 	err := ioutil.WriteFile(path.Join(storePath, md5_hash+suffix), pic, 0644)
 	if err != nil {
 		log.Fatal("WriteFile: ", err.Error())
-		return ""
+		return "", errors.New("Can not write the file")
 	}
-	return md5_hash + suffix
+	return md5_hash + suffix, nil
 }
 
 func main() {
