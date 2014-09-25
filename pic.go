@@ -1,17 +1,14 @@
 package main
 
 import (
-	"errors"
 	"html/template"
 	"os"
 
-	"crypto/md5"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"path"
 
+	"github.com/NJUST-FishTeam/pic/picfs"
 	"github.com/codegangsta/cli"
 )
 
@@ -42,7 +39,7 @@ func uploadHandle(w http.ResponseWriter, r *http.Request) {
 		}()
 
 		bytes, err := ioutil.ReadAll(file)
-		fileName, err := saveFile(bytes)
+		fileName, err := picfs.SavePic(bytes, storePath)
 		if err != nil {
 			w.Write([]byte("文件上传失败：不支持的文件类型"))
 			return
@@ -50,24 +47,6 @@ func uploadHandle(w http.ResponseWriter, r *http.Request) {
 
 		w.Write([]byte("/static/img/" + fileName))
 	}
-}
-
-func saveFile(pic []byte) (string, error) {
-	md5_hash := fmt.Sprintf("%x", md5.Sum(pic))
-	suffix := ""
-	if IsJPEG(pic) {
-		suffix = ".jpg"
-	} else if IsPNG(pic) {
-		suffix = ".png"
-	} else {
-		return "", errors.New("The file is not a picture")
-	}
-	err := ioutil.WriteFile(path.Join(storePath, md5_hash+suffix), pic, 0644)
-	if err != nil {
-		log.Fatal("WriteFile: ", err.Error())
-		return "", errors.New("Can not write the file")
-	}
-	return md5_hash + suffix, nil
 }
 
 func main() {
