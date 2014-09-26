@@ -53,6 +53,8 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "pic"
 	app.Usage = "A simple picture bed"
+	app.Author = "maemual"
+	app.Version = "0.3"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:  "path",
