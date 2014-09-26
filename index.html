@@ -1,13 +1,271 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Golang upload</title>
-    </head>
-    <body>
-        <form id="uploadForm" method="POST" enctype="multipart/form-data" action="/upload/">
-            <p>Golang upload</p>
-            <p>目前只支持jpg和png图片</p>
-            <input type="FILE" id="file" name="file" />
-            <input type="SUBMIT" value="upload">
-        </form>
-    </body>
+
+<head>
+    <title>Picture upload</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <style type="text/css">
+    .blog-title {
+        border: 1px solid #fff;
+        border-left: 0;
+        border-right: 0;
+        display: inline-block;
+        font-size: 60px;
+        font-weight: 700;
+        line-height: 108px;
+        letter-spacing: 2px;
+        margin: 0 auto;
+        padding: 0 58px;
+        position: relative;
+        width: auto;
+    }
+    #logo {
+        padding: 88px;
+        position: relative;
+        text-align: center;
+        padding-bottom: 20px;
+        height: 57%;
+    }
+    html,body,#wrap{
+        background-color: #6e4c96;
+        height:100%;
+        padding: 0;
+        margin: 0;
+    }
+    .upmodel{
+        background-color: #eaeaea;
+        height: 43%;
+    }
+    h1,h3{
+        color: #ffffff;
+    }
+    #uploadForm{
+        margin-left: 40%;
+        
+    }
+    #btn-sub{
+        width: 261px;
+        height: 63px;
+        background-color: #6e4c96;
+    }
+    #Subs{
+        color: #ffffff;
+        font-size: 28px;
+    }
+    #InputFile{
+        width: 87%;
+    }
+    #InputFilelab{
+        width: 12%;
+    }
+    .form-group{
+        padding-top: 35px;
+        /*padding-left: 15px;*/
+    }
+    .icons{
+        padding-top: 10px;
+    }
+    .fileinput-button {
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-subs {
+        color: #fff;
+        background-color: #6e4c96;
+        border-color: #6e4c96;
+        width: 261px;
+        height: 63px;
+        font-size: 23px;
+    }
+    .fileinput-button input {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        opacity: 0;
+        -ms-filter: 'alpha(opacity=0)';
+        font-size: 200px;
+        direction: ltr;
+        cursor: pointer;
+    }
+    #btnwrap{
+        margin-top:50px;
+    }
+    #imgwrap{
+    }
+    #ImgPr{
+        width: 0px;
+        height: 0px;
+        margin-top: 0px;
+        margin-left: 70px;
+        margin-bottom: 30px;
+    }
+    #urlwrap{
+        margin-left: -167px;
+        width: 0px;
+        height: 0px;
+        display: none;
+    }
+    #panel-up{
+        color: #ffffff;
+        background-color: #6e4c96;
+        border-color: #6e4c96;
+    }
+    </style>
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        jQuery.fn.extend({
+            uploadPreview: function (opts) {
+                
+                var _self = this, _this = $(this);
+                opts = jQuery.extend({
+                    Img: "ImgPr",
+                    Width: 100,
+                    Height: 100,
+                    ImgType: [ "jpg", "png"],
+                    Callback: function () { }
+                }, opts || {});
+                _self.getObjectURL = function (file) {
+                    var url = null;
+                    if (window.createObjectURL != undefined) {
+                        url = window.createObjectURL(file);
+                    } else if (window.URL != undefined) {
+                        url = window.URL.createObjectURL(file);
+                    } else if (window.webkitURL != undefined) {
+                        url = window.webkitURL.createObjectURL(file);
+                    }
+                    return url;
+                }
+                _this.change(function () {
+                    
+                    if (this.value) {
+                        if (!RegExp("\.(" + opts.ImgType.join("|") + ")$", "i").test(this.value.toLowerCase())) {
+                            alert("选择文件错误,图片类型必须是" + opts.ImgType.join("，") + "中的一种");
+                            this.value = "";
+                            return false;
+                        }
+                        if (navigator.userAgent.indexOf("MSIE") > -1) {
+                            try {
+                                $("#" + opts.Img).attr('src', _self.getObjectURL(this.files[0]));
+                            } catch (e) {
+                                var src = "";
+                                var obj = $("#" + opts.Img);
+                                var div = obj.parent("div")[0];
+                                _self.select();
+                                if (top != self) {
+                                    window.parent.document.body.focus();
+                                } else {
+                                    _self.blur();
+                                }
+                                src = document.selection.createRange().text;
+                                document.selection.empty();
+                                obj.hide();
+                                obj.parent("div").css({
+                                    'filter': 'progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)',
+                                    'width': opts.Width + 'px',
+                                    'height': opts.Height + 'px'
+                                });
+                                div.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = src;
+                            }
+                        } else {
+                            $("#" + opts.Img).attr('src', _self.getObjectURL(this.files[0]));
+                        }
+                        opts.Callback();
+                        $('#ImgPr').css("display","inherit");
+                        $('#ImgPr').css("width","120px");
+                        $('#ImgPr').css("height","120px");
+                        $('#btnwrap').css("display","none");
+                        $('#btnwrap').css("width","0px");
+                        $('#btnwrap').css("height","0px");
+                        $('#urlwrap').css("display","none");
+                        $('#urlwrap').css("width","0px");
+                        $('#urlwrap').css("height","0px");
+                        $('#btn-sub').css("display","inherit");
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+    $(function() {
+            $("#fileupload").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
+        });
+    </script>
+</head>
+<body>
+<div id="wrap">
+<header id="logo" class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-push-2">
+            <h1 class="blog-title">
+                Put your pics
+            </h1>
+            <h3 class="blog-desc">
+                This is a simple, but powerful picture hosted platform that allows you to share your pictures with the world.
+            </h3>
+        </div>
+    </div>
+</header>
+<div class="upmodel">
+    <form id="uploadForm" method="POST" enctype="multipart/form-data" action="/upload/" role="form">
+        <div class="form-group ">
+            <div id="urlwrap" class="panel panel-success">
+                <div class="panel-heading " id ="panel-up">
+                    <h3 class="panel-title">文件上传成功 url:</h3>
+                  </div>
+                  <div class="panel-body">
+                    <p id = "urls"></p>
+                  </div>
+            </div>
+            <div id="imgwrap">
+                        <img id="ImgPr"style="display: none;" /></div>
+            <span class="btn btn-subs fileinput-button" id="btnwrap">
+                <i class="glyphicon glyphicon-plus icons"></i>
+                <span>选择图片</span>
+                <input id="fileupload" type="file" name="file">
+            </span>
+        </div>
+        <button type="submit" class="btn" id="btn-sub" style="display:none"><span id="Subs">上传</span></button>
+    </form>
+</div>
+</div>
+    <script type="text/javascript">
+        $('#uploadForm').submit(function (e) {
+            e.preventDefault();
+            var fileObj = document.getElementById("fileupload").files[0]; // 获取文件对象
+            console.log(fileObj);
+            var FileController = "/upload/";                    // 接收上传文件的后台地址 
+           
+            // FormData 对象
+            var form = new FormData();                     
+            form.append("file", fileObj);                           // 文件对象
+
+            // XMLHttpRequest 对象
+            var xhr = new XMLHttpRequest();
+            xhr.open("post", FileController, true);
+            var oldsrc =  document.getElementById("ImgPr").src;
+            //document.getElementById("ImgPr").src="http://www.lanrentuku.com/savepic/img/allimg/1212/5-121204193R0.gif";
+            xhr.onload = function () {
+                document.getElementById("ImgPr").src=oldsrc;
+                $('#ImgPr').css("display","none");
+                $('#ImgPr').css("width","0px");
+                $('#ImgPr').css("height","0px");
+                $('#btnwrap').css("display","inherit");
+                $('#btnwrap').css("width","263px");
+                $('#btnwrap').css("height","63px");
+                $('#btn-sub').css("display","none");
+                $('#urlwrap').css("display","inherit");
+                $('#urlwrap').css("width","600px");
+                $('#urlwrap').css("height","100px");
+                var strurl = window.location.href;
+                $('#urls').html(strurl.substring(0,strurl.length-1)+ xhr.responseText);
+            };
+            xhr.send(form);
+        })
+    </script>
+    
+</body>
 </html>
