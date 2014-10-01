@@ -45,7 +45,7 @@ func uploadHandle(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		w.Write([]byte("/static/img/" + fileName))
+		w.Write([]byte("/static/images/" + fileName))
 	}
 }
 
