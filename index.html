@@ -260,7 +260,7 @@
                 $('#urlwrap').css("display","inherit");
                 $('#urlwrap').css("width","600px");
                 $('#urlwrap').css("height","100px");
-                var strurl = window.location.href;
+                var strurl = "http://icpc.njust.edu.cn/";//window.location.href;
                 $('#urls').html(strurl.substring(0,strurl.length-1)+ xhr.responseText);
             };
             xhr.send(form);
