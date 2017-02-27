@@ -1,5 +1,7 @@
 # coding: utf-8
 
+from __future__ import print_function
+
 import imghdr
 import os
 import hashlib
@@ -57,7 +59,7 @@ class Application(tornado.web.Application):
 if __name__ == '__main__':
     tornado.options.parse_command_line()
     if not os.path.exists(tornado.options.options.path):
-        print 'no such directory'
+        print('no such directory')
         sys.exit(0)
     http_server = tornado.httpserver.HTTPServer(Application())
     http_server.listen(tornado.options.options.port)
